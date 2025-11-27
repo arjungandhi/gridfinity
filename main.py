@@ -1,11 +1,10 @@
 import cadquery as cq
-from gridfinity.bin import gridfinity_bin
+from gridfinity.box import gridfinity_box
 from cadquery.vis import show
 
-# Create a 10mm x 10mm x 10mm cube
-bin = gridfinity_bin()
-show(bin)
+box = gridfinity_box()
+show(box)
 
 
 # Export to STL file (for 3D printing)
-cq.exporters.export(bin, "outputs/output.stl")
+cq.exporters.export(box, "outputs/output.stl")
