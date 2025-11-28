@@ -1,4 +1,4 @@
-.PHONY: help venv install test lint format clean run view
+.PHONY: help venv install test lint format clean run view drawer
 
 # Variables
 VENV := venv
@@ -16,6 +16,7 @@ help:
 	@echo "  make fix        - Run ruff with auto-fix"
 	@echo "  make run        - Run the main application"
 	@echo "  make view       - Watch and display output.stl with f3d"
+	@echo "  make drawer WIDTH=<mm> DEPTH=<mm> - Generate baseplates for drawer"
 	@echo "  make clean      - Remove venv and cache files"
 	@echo "  make clean-all  - Remove venv, cache, and build artifacts"
 
@@ -115,6 +116,17 @@ clean-all: clean
 	@echo "Removing virtual environment..."
 	rm -rf $(VENV)
 	@echo "Everything cleaned!"
+
+# Generate baseplates for a drawer
+drawer: install
+	@if [ -z "$(WIDTH)" ] || [ -z "$(DEPTH)" ]; then \
+		echo "Error: WIDTH and DEPTH must be specified"; \
+		echo "Usage: make drawer WIDTH=300 DEPTH=200"; \
+		echo "Optional: THICKNESS=5.0 (default: 5.0mm)"; \
+		exit 1; \
+	fi
+	@echo "Generating baseplates for $(WIDTH)mm x $(DEPTH)mm drawer..."
+	$(PYTHON) -m tools.drawer $(WIDTH) $(DEPTH) $(if $(THICKNESS),--thickness $(THICKNESS),)
 
 # Freeze current dependencies
 freeze: install
